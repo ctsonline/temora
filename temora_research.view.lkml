@@ -1,6 +1,6 @@
 view: temora_research {
  view_label: "Temora Research"
-  sql_table_name:"ctsdev" ;;
+
 
 
   dimension: a1 {
