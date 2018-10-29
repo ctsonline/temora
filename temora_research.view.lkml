@@ -1,6 +1,6 @@
 view: temora_research {
  view_label: "Temora Research"
-  sql_table_name: com1_probes ;;
+  sql_table_name: public.ctsfieldmousedata ;;
 
   dimension: a1 {
     group_label: "Analogs"
@@ -82,17 +82,9 @@ view: temora_research {
   }
 
 
-  dimension_group: time10{
-    type: time
-    timeframes: [minute10]
-    sql:TIMESTAMPTZ(${TABLE}.timestamp) ;;
-  }
-  dimension_group: timestamp {
-    type: time
-    timeframes: [raw, time, time_of_day, date, week, month, hour_of_day, hour, hour3, minute, minute10]
-    sql: TIMESTAMPTZ(${TABLE}.timestamp);;
-    drill_fields: [timestamp_date,timestamp_hour,timestamp_week]
-  }
+
+
+
 
 #   2017.11.14 AD at 13:31:28 AEDT
 
@@ -170,8 +162,3 @@ view: temora_research {
 
 
 }
-
-
-
-
-
