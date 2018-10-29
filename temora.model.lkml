@@ -1,4 +1,4 @@
-connection: "centratechredshift"
+connection: "ctsdev"
 
 # include all the views
 include: "*.view"
