@@ -1,6 +1,7 @@
 view: temora_research {
  view_label: "Temora Research"
-  sql_table_name: public.ctsfieldmousedata ;;
+  sql_table_name:ctsfieldmousedata ;;
+
 
   dimension: a1 {
     group_label: "Analogs"
@@ -19,7 +20,6 @@ view: temora_research {
     type: number
     sql: ${TABLE}.a3 ;;
   }
-
 
   dimension: a4 {
     group_label: "Analogs"
@@ -77,19 +77,21 @@ view: temora_research {
     sql: ${TABLE}.sid ;;
   }
 
-  dimension_group: t1 {
-    type: time
-    timeframes: [raw, hour_of_day, day_of_week, time_of_day, date]
-    sql: ${TABLE}t1 ;;
-  }
 
   dimension_group: timestamp {
-    label: "Time real"
     type: time
     convert_tz: yes
-    timeframes: [raw, time, time_of_day, hour, date, week, month]
+    timeframes: [raw, time, time_of_day, hour_of_day,hour, date, week, month]
     sql: ${TABLE}.timestamp::timestamp;;
+    drill_fields: [timestamp_date, timestamp_hour_of_day,average_value_a3]
   }
+
+  ##dimension_group: timestamp {
+  ## type: time
+  ##convert_tz: yes
+  ##timeframes: [raw, time, time_of_day, date, hour, week, month, minute30  ]
+  ##sql: convert_timezone('AEDT','AEDT', ${TABLE}.timestamp::timestamp);;
+  # }
 
 
 #   2017.11.14 AD at 13:31:28 AEDT
@@ -99,72 +101,34 @@ view: temora_research {
     drill_fields: []
   }
 
-  measure: average_value_a1 {
-    type: average
+  measure: value_a2 {
+    type: date_hour
     sql: ${a1} ;;
+    drill_fields: [timestamp_hour,a2,value_a2,a2,timestamp_date,timestamp_raw]
+  }
+
+  measure: average_value_a1 {
+    type: max
+    sql: ${a1} ;;
+    drill_fields: [timestamp_hour,a2,average_value_a1,a1,timestamp_date,timestamp_raw]
   }
 
   measure: average_value_a2 {
-    type: average
-    sql: ${a2} ;;
-  }
-
-
-  measure: min_value_a1 {
-    type: min
-    sql: ${a1} ;;
-  }
-
-  measure: min_value_a2 {
-    type: min
-    sql: ${a2} ;;
-  }
-
-  measure: min_value_a3 {
-    type: min
-    sql: ${a3} ;;
-  }
-
-
-  measure: max_value_a1 {
-    type: max
-    sql: ${a1} ;;
-  }
-
-  measure: max_value_a2 {
     type: max
     sql: ${a2} ;;
+    drill_fields: [timestamp_hour,average_value_a2,a2,timestamp_date,timestamp_raw]
   }
 
-  measure: max_value_a3 {
+  measure: average_value_a3 {
     type: max
     sql: ${a3} ;;
+    drill_fields: [timestamp_hour,a3,average_value_a3,timestamp_date,timestamp_raw]
   }
 
-
-  measure: max_value_d1 {
-    label: "BBQ ON/OFF"
-    type: string
-    sql: ${d1}} ;;
-  }
-
-  measure: max_value_d2 {
+  measure: average_value_a4 {
     type: max
-    sql: ${d2}} ;;
+    sql: ${a4} ;;
+    drill_fields: [timestamp_hour,a4,average_value_a4,timestamp_date,timestamp_raw]
   }
 
-  measure: d1_on {
-    label: "BBQ On"
-    type: number
-    sql: ${d1}=1 ;;
   }
-
-  measure: min_value_d2 {
-    type: min
-    sql: ${d2}} ;;
- }
-
-
-
-
-}
