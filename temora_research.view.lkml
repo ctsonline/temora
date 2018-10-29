@@ -2,140 +2,176 @@ view: temora_research {
  view_label: "Temora Research"
   sql_table_name: com1_probes ;;
 
-  dimension: Value{
-    hidden: no
-    label: "Probe Value"
+  dimension: a1 {
+    group_label: "Analogs"
     type: number
-    sql: ${TABLE}.v1 ;;
-    value_format_name: decimal_2
+    sql: ${TABLE}.a1 ;;
   }
 
-  dimension_group: reading {
+  dimension: a2 {
+    group_label: "Analogs"
+    type: number
+    sql: ${TABLE}.a2 ;;
+  }
+
+  dimension: a3 {
+    group_label: "Analogs"
+    type: number
+    sql: ${TABLE}.a3 ;;
+  }
+
+  dimension: a4_count60{
+    type: number
+    sql: ${a4}>550 ;;
+  }
+
+  dimension: a4 {
+    group_label: "Analogs"
+    type: number
+    sql: ${TABLE}.a4 ;;
+  }
+
+  dimension: cid {
+    label: "Customer ID"
+    type: number
+    value_format_name: id
+    sql: ${TABLE}.cid ;;
+  }
+
+  dimension: d1 {
+    group_label: "Digital"
+    type: number
+    sql: ${TABLE}.d1 ;;
+  }
+
+  dimension: d2 {
+    group_label: "Digital"
+    type: number
+    sql: ${TABLE}.d2 ;;
+  }
+
+  dimension: r1 {
+    group_label: "Relays"
+    type: number
+    sql: ${TABLE}.r1 ;;
+  }
+
+  dimension: r2 {
+    group_label: "Relays"
+    type: number
+    sql: ${TABLE}.r2 ;;
+  }
+
+  dimension: r3 {
+    group_label: "Relays"
+    type: number
+    sql: ${TABLE}.r3 ;;
+  }
+
+  dimension: r4 {
+    group_label: "Relays"
+    type: number
+    sql: ${TABLE}.r4 ;;
+  }
+
+  dimension: sid {
+    label: "Site ID"
+    type: number
+    value_format_name: id
+    sql: ${TABLE}.sid ;;
+  }
+
+
+  dimension_group: time10{
     type: time
-    timeframes: [raw, date, time, hour_of_day]
-    sql: cast(TIMESTAMPTZ(${TABLE}.t1) as timestamp);;
+    timeframes: [minute10]
+    sql:TIMESTAMPTZ(${TABLE}.timestamp) ;;
   }
-
-  dimension_group: reading_8am {
-    description: "A date starts from 8am of that day and ends before 8am of the following day."
+  dimension_group: timestamp {
     type: time
-    timeframes: [date, hour, week, month, year]
-    sql: DATEADD(hour,-8,${reading_raw}) ;;
+    timeframes: [raw, time, time_of_day, date, week, month, hour_of_day, hour, hour3, minute, minute10]
+    sql: TIMESTAMPTZ(${TABLE}.timestamp);;
+    drill_fields: [timestamp_date,timestamp_hour,timestamp_week]
   }
 
-  dimension: name {
-    label: "Long Name"
-    type: string
-    sql: ${TABLE}.name ;;
-  }
+#   2017.11.14 AD at 13:31:28 AEDT
 
-  dimension: area {
-    type: string
-    sql: split_part(${name}, '.', 2) ;;
-  }
-
-  dimension: data_type {
-    type: string
-    sql: split_part(${name}, '.', 3) ;;
-  }
-
-  dimension: location {
-    type: string
-    sql: split_part(${name}, '.', 4) ;;
-  }
-
-  dimension: Probe_Sensor {
-    label: "Sensor"
-    group_label: "Probe Sensor"
-    type: string
-    sql: split_part(${location}, ' ', 2) ;;
-  }
-
-  dimension: Probe_Sensor_Nu {
-    label: "Number"
-    group_label: "Probe Sensor"
-    type: string
-    sql: split_part(${Probe_Sensor}, '-', 1) ;;
-  }
-
-  dimension: Probe_Sensor_Depth {
-    label: "Depth"
-    group_label: "Probe Sensor"
-    type: string
-    sql: split_part(${Probe_Sensor}, '-', 2) ;;
-  }
-
-
-  dimension: __sheet {
-    type: string
-    hidden: yes
-    sql: ${TABLE}.__sheet ;;
-  }
-
-  dimension_group: t1 {
-    type: time
-    timeframes: [raw, date, time, hour,month,week,year]
-    sql: cast(TIMESTAMPTZ(${TABLE}.t1) as timestamp) ;;
-    drill_fields: [t1_hour, t1_time,t1_month,t1_week,t1_year]
-  }
-
-  dimension: sensor {
-    hidden: yes
-    type: string
-    sql: ${TABLE}.sensor ;;
-  }
-
-  dimension: sensor_depth {
-    type: number
-    sql: right(${sensor}, len(${sensor}) - 5) ;;
-  }
-
-  measure: average_value {
-    label: "Value - Average"
-    type: average
-    sql: ${Value} ;;
-  }
-
-  measure: probecalc {
-    label: "probe calc"
-    type: number
-    sql:18.13*LN(${average_value})+-41.06;;
-    value_format_name: decimal_2
-    drill_fields: [t1_month,average_max,average_min]
-  }
-
-  measure: average_max {
-    label: "average_max"
-    type: average
-    sql: ${TABLE}.v1 ;;
-  }
-
-
-  measure: average_min {
-    label: "Value - Min"
-    type: min
-    sql: ${TABLE}.v1 ;;
-  }
-
-
-  measure: count_probes {
-    type: count_distinct
-    sql: ${Probe_Sensor_Nu} ;;
-  }
-
-  measure: count_sensors {
-    type: count_distinct
-    sql: ${sensor} ;;
-  }
-
-  measure: average_sensor_per_probes {
-    type: number
-    sql: 1.0*${count_sensors}/NULLIF(${count_probes},0) ;;
-    value_format_name: decimal_1
-  }
-
-  measure: count_readings {
+  measure: count {
     type: count
-    drill_fields: [area,Probe_Sensor]
+    drill_fields: []
   }
+
+  measure: average_value_a1 {
+    type: average
+    sql: ${a1} ;;
+  }
+
+  measure: average_value_a2 {
+    type: average
+    sql: ${a2} ;;
+  }
+
+
+  measure: min_value_a1 {
+    type: min
+    sql: ${a1} ;;
+  }
+
+  measure: min_value_a2 {
+    type: min
+    sql: ${a2} ;;
+  }
+
+  measure: min_value_a3 {
+    type: min
+    sql: ${a3} ;;
+  }
+
+
+  measure: max_value_a1 {
+    type: max
+    sql: ${a1} ;;
+  }
+
+  measure: max_value_a2 {
+    type: max
+    sql: ${a2} ;;
+  }
+
+  measure: max_value_a3 {
+    type: max
+    sql: ${a3} ;;
+  }
+
+
+  measure: max_value_d1 {
+    label: "BBQ ON/OFF"
+    type: string
+    sql: ${d1}} ;;
+  }
+
+  measure: max_value_d2 {
+    type: max
+    sql: ${d2}} ;;
+  }
+
+  measure: d1_on {
+    label: "BBQ On"
+    type: number
+    sql: ${d1}=1 ;;
+  }
+
+  measure: min_value_d2 {
+    type: min
+    sql: ${d2}} ;;
+ }
+
+
+
+
 }
+
+
+
+
+
