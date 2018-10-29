@@ -9,3 +9,7 @@ datagroup: temora_default_datagroup {
 }
 
 persist_with: temora_default_datagroup
+
+explore: temora_research{
+  label: "Temora Research"
+}
