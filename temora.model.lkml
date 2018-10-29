@@ -8,8 +8,10 @@ datagroup: temora_default_datagroup {
   max_cache_age: "1 hour"
 }
 
-persist_with: temora_default_datagroup
 
-explore: temora_research{
+
+
+
+explore: temora_research {
   label: "Temora Research"
 }
