@@ -20,10 +20,6 @@ view: temora_research {
     sql: ${TABLE}.a3 ;;
   }
 
-  dimension: a4_count60{
-    type: number
-    sql: ${a4}>550 ;;
-  }
 
   dimension: a4 {
     group_label: "Analogs"
@@ -81,9 +77,19 @@ view: temora_research {
     sql: ${TABLE}.sid ;;
   }
 
+  dimension_group: t1 {
+    type: time
+    timeframes: [raw, hour_of_day, day_of_week, time_of_day, date]
+    sql: ${TABLE}t1 ;;
+  }
 
-
-
+  dimension_group: timestamp {
+    label: "Time real"
+    type: time
+    convert_tz: yes
+    timeframes: [raw, time, time_of_day, hour, date, week, month]
+    sql: ${TABLE}.timestamp::timestamp;;
+  }
 
 
 #   2017.11.14 AD at 13:31:28 AEDT
