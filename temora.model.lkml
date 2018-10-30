@@ -9,7 +9,9 @@ datagroup: temora_default_datagroup {
 }
 
 
-
+explore: temora_sewer {
+  label: "Temora Sewer"
+}
 
 
 explore: temora_research {
